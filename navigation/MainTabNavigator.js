@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import WishlistsScreen from '../screens/WishlistsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const HomeStack = createStackNavigator({
@@ -25,16 +25,38 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const HomeStack2 = createStackNavigator({
+  Home: HomeScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+HomeStack2.navigationOptions = {
+  tabBarLabel: 'Discovery',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-compass${focused ? '' : '-outline'}`
+          : 'md-compass'
+      }
+    />
+  ),
+};
+
+const WishlistsStack = createStackNavigator({
+  Wishlists: WishlistsScreen,
+});
+
+WishlistsStack.navigationOptions = {
+  tabBarLabel: 'Wishlists',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-heart${focused ? '' : '-outline'}`
+          : 'md-heart'
+      }
     />
   ),
 };
@@ -55,6 +77,7 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  HomeStack2,
+  WishlistsStack,
   SettingsStack,
 });
