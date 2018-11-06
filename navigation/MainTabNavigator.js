@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import WishlistsScreen from '../screens/WishlistsScreen';
 import ProfilScreen from '../screens/ProfilScreen';
+import DiscoveryScreen from '../screens/DiscoveryScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -18,18 +19,18 @@ HomeStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-home${focused ? '' : '-outline'}`
+          : 'md-home'
       }
     />
   ),
 };
 
-const HomeStack2 = createStackNavigator({
-  Home: HomeScreen,
+const DiscoveryStack = createStackNavigator({
+  Discovery: DiscoveryScreen,
 });
 
-HomeStack2.navigationOptions = {
+DiscoveryStack.navigationOptions = {
   tabBarLabel: 'Discovery',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -77,7 +78,7 @@ ProfilStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  HomeStack2,
+  DiscoveryStack,
   WishlistsStack,
   ProfilStack,
 });
