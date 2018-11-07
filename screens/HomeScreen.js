@@ -9,154 +9,101 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Button, Icon, Left, Right, Body } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Input, Button, Icon, Left, Item, Body } from 'native-base';
 import PropTypes from 'prop-types';
 import Slideshow from 'react-native-slideshow';
 import { WebBrowser } from 'expo';
 
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
+import SliderEntry from '../components/SliderEntry';
+import styless, { colors } from '../styles/index.style';
+import { ENTRIES1, ENTRIES2 ,PRODUCTS} from '../static/entries';
+import { scrollInterpolators, animatedStyles } from '../utils/animations';
+
+
 import { MonoText } from '../components/StyledText';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 
-const data = [
-  {
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeuQYdkItTcrHfKwmfl7dBADwJ9TVrQ4LZWltPbVeCIkPikqlH",
-    name: "Kasur tipe A",
-    price : "Rp.200.000"
-  },
-  {
-    imageUrl: "https://m2fabelio.imgix.net/catalog/product/cache/image/700x350/e9c3970ab036de70892d86c6d221abfe/p/o/Poly_TV_Stand_0.jpg",
-    name: "Meja tv unik",
-    price : "Rp.100.000"
-  },
-  {
-    imageUrl: "https://m2fabelio.imgix.net/catalog/product/cache/image/700x350/e9c3970ab036de70892d86c6d221abfe/p/o/Poly_TV_Stand_0.jpg",
-    name: "Meja tipe B",
-    price : "Rp.200.000"
-  },
-  {
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeuQYdkItTcrHfKwmfl7dBADwJ9TVrQ4LZWltPbVeCIkPikqlH",
-    name: "Kasur unik",
-    price : "Rp.220.000"
-  }
-];
+const SLIDER_1_FIRST_ITEM = 1;
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: "Home",
+    header: null,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      data: data,
+      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
       position: 1,
-      interval: null,
-      dataSource: [
-        {
-          title: 'Citilink Berhadiah',
-          caption: 'Sampai 23 desember',
-          url: 'https://citilinkstorage.blob.core.windows.net/citilink/images/default-source/promo-events-press-releases/greensale2-094d8367eddd767d084cdff0000433061.jpg?sfvrsn=0',
-        }, {
-          title: 'Bni 46 0% persen',
-          caption: 'cicilan sampai 24 bulan',
-          url: 'https://image01.kota.com/20140403023925/0000/0000/0032/8446/bni_mudik_08062017.jpeg',
-        }, {
-          title: 'Weekend deals',
-          caption: 'Potongan 100rb',
-          url: 'https://dwzph1g5tm8i1.cloudfront.net/landing/promo_hotel_jgos_2017_8a1.jpg',
-        }, {
-          title: 'Bni 46 0% persen',
-          caption: 'cicilan sampai 24 bulan',
-          url: 'https://image01.kota.com/20140403023925/0000/0000/0032/8446/bni_mudik_08062017.jpeg',
-        },
-      ],
+      interval: null
     };
   }
 
   componentWillMount() {
-    this.setState({
-      interval: setInterval(() => {
-        this.setState({
-          position: this.state.position === this.state.dataSource.length ? 0 : this.state.position + 1
-        });
-      }, 2000)
-    });
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.interval);
   }
 
+_renderItem ({item, index}) {
+  return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+}
+
+_renderItemWithParallax ({item, index}, parallaxProps) {
+  return (
+      <SliderEntry
+        data={item}
+        even={(index + 1) % 2 === 0}
+        parallax={true}
+        parallaxProps={parallaxProps}
+      />
+  );
+}
+
   render() {
+    const promoSlide = this.promoSlide(1);
     return (
       <View style={styles.container}> 
-       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Slideshow 
-        dataSource={this.state.dataSource}
-        position={this.state.position}
-        onPositionChanged={position => this.setState({ position })} />
+      <Header searchBar rounded style={styles.searchBar}>
+          <Item>
+            <Icon name="ios-search" />
+            <Input placeholder="Search" />
+            <Icon name="ios-cart" />
+          </Item>
+          <Button transparent>
+            <Text>Search</Text>
+          </Button>
+        </Header>
+
+       <ScrollView contentContainerStyle={styles.contentContainer}>
+       { promoSlide }
         <MonoText style={{marginBottom:10}}>semua promo</MonoText>
         <Grid style={{Height: 100, marginTop:40,flexGrow: 1}}>
           <Row>
             <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://th.seaicons.com/wp-content/uploads/2015/10/Retro-TV-icon.png'}} />
+                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
             </Col>
             <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://www.clipartmax.com/png/middle/191-1917296_bed-bedroom-furniture-motel-room-single-icon-bed-flat-icon-png.png'}} />
+                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
             </Col>
             <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxq82yLW7JtICF81wXt6Xa9cry7pgtij0VF5NClwmuMMWCvUrn'}} />
+                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
             </Col>
             <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://mbtskoudsalg.com/images/png-icons-4.png'}} />
+                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
             </Col>
             <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'http://www.icons101.com/icon_png/size_256/id_67319/Bathroom.png'}} />
-            </Col>
-          </Row>
-          <Row style={{marginTop:80}}>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'http://www.icons101.com/icon_png/size_256/id_67319/Bathroom.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://th.seaicons.com/wp-content/uploads/2015/10/Retro-TV-icon.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://mbtskoudsalg.com/images/png-icons-4.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://www.clipartmax.com/png/middle/191-1917296_bed-bedroom-furniture-motel-room-single-icon-bed-flat-icon-png.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxq82yLW7JtICF81wXt6Xa9cry7pgtij0VF5NClwmuMMWCvUrn'}} />
+                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
             </Col>
           </Row>
         </Grid>
-      <MonoText style={{marginTop:50}}>Rekomendasi</MonoText>
+      <MonoText style={{marginTop:30}}>Best Seller</MonoText>
       <FlatList
         horizontal
-        data={this.state.data}
-        renderItem={({ item: rowData }) => {
-          return (
-            <Card>
-              <Body>
-                <Image source={{uri : rowData.imageUrl}} style={{height: 150, width: 150, flex: 1}}/>
-              </Body>
-            <CardItem footer>
-              <Left >
-                <Text style={{fontSize: 13}}>{rowData.name} {'\n'} {rowData.price}</Text>
-              </Left>
-            </CardItem>
-            </Card>
-          );
-        }}
-        keyExtractor={(item, index) => index}
-      />
-      <MonoText style={{marginTop:12}}>Best Seller</MonoText>
-      <FlatList
-        horizontal
-        data={this.state.data}
+        data={PRODUCTS}
         renderItem={({ item: rowData }) => {
           return (
             <Card>
@@ -171,72 +118,52 @@ export default class HomeScreen extends React.Component {
             </Card>
           );
         }}
-        keyExtractor={(item, index) => index}
+        keyExtractor = { (item, index) => index.toString() }
       />
-        {/* <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help,s it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView> */}
-
-        {/* <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View> */}
         </ScrollView>
       </View>
     );
   }
+
+  promoSlide (number) {
+    const { slider1ActiveSlide } = this.state;
+    return (
+        <View style={{marginTop:10}}>
+            <Carousel
+              ref={c => this._slider1Ref = c}
+              data={ENTRIES1}
+              renderItem={this._renderItemWithParallax}
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              hasParallaxImages={true}
+              firstItem={SLIDER_1_FIRST_ITEM}
+              inactiveSlideScale={0.94}
+              inactiveSlideOpacity={0.7}
+              inactiveSlideShift={20}
+              containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContentContainer}
+              loop={true}
+              loopClonesPerSide={2}
+              autoplay={true}
+              autoplayDelay={2000}
+              autoplayInterval={5000}
+              onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+            />
+            {/* <Pagination
+              dotsLength={ENTRIES1.length}
+              activeDotIndex={slider1ActiveSlide}
+              containerStyle={styles.paginationContainer}
+              dotColor={'rgba(255, 255, 255, 0.92)'}
+              dotStyle={styles.paginationDot}
+              inactiveDotColor={colors.black}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={0.6}
+              carouselRef={this._slider1Ref}
+              tappableDots={!!this._slider1Ref}
+            /> */}
+        </View>
+    );
+}
 
   _maybeRenderDevelopmentModeWarning() {
     if (__DEV__) {
@@ -274,15 +201,15 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 30,
     flex: 1,
     backgroundColor: '#fff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  searchBar:
+  {
+    backgroundColor:'white',
+    marginBottom:5,
+    borderRadius:25
   },
   contentContainer: {
     // paddingTop: 30,
