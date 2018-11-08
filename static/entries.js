@@ -84,5 +84,29 @@ export const PRODUCTS= [
       imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeuQYdkItTcrHfKwmfl7dBADwJ9TVrQ4LZWltPbVeCIkPikqlH",
       name: "Kasur unik",
       price : "Rp.220.000"
-    }
+    },
+    {
+        imageUrl: "https://m2fabelio.imgix.net/catalog/product/cache/image/700x350/e9c3970ab036de70892d86c6d221abfe/p/o/Poly_TV_Stand_0.jpg",
+        name: "Meja tipe B",
+        price : "Rp.200.000"
+      },
+  ];
+
+  export const LISTOFCATEGORY= [
+    {
+      imageUrl: "https://png.pngtree.com/svg/20170515/bedroom_598070.png",
+      name: "Kasur"
+    },
+    {
+      imageUrl: "https://png.pngtree.com/svg/20170307/bathroom_897733.png",
+      name: "Kamar Mandi"
+    },
+    {
+      imageUrl: "https://png.pngtree.com/svg/20161106/chair_427731.png",
+      name: "Kursi"
+    },
+    {
+        imageUrl: "http://icons.iconarchive.com/icons/icons8/ios7/256/Household-Garage-icon.png",
+        name: "Garasi"
+      },
   ];

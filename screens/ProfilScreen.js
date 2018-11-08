@@ -1,5 +1,7 @@
 import React from 'react';
 import { ExpoConfigView } from '@expo/samples';
+import { ScrollView, StyleSheet } from 'react-native';
+import { ENTRIES1, LISTOFCATEGORY ,PRODUCTS} from '../static/entries';
 
 export default class ProfilScreen extends React.Component {
   static navigationOptions = {

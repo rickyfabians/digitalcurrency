@@ -10,16 +10,11 @@ import {
   View,
 } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Input, Button, Icon, Left, Item, Body } from 'native-base';
-import PropTypes from 'prop-types';
-import Slideshow from 'react-native-slideshow';
-import { WebBrowser } from 'expo';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import SliderEntry from '../components/SliderEntry';
-import styless, { colors } from '../styles/index.style';
-import { ENTRIES1, ENTRIES2 ,PRODUCTS} from '../static/entries';
-import { scrollInterpolators, animatedStyles } from '../utils/animations';
+import { ENTRIES1, LISTOFCATEGORY ,PRODUCTS} from '../static/entries';
 
 
 import { MonoText } from '../components/StyledText';
@@ -36,6 +31,7 @@ export default class HomeScreen extends React.Component {
     super(props);
 
     this.state = {
+      loc:LISTOFCATEGORY,
       slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
       position: 1,
       interval: null
@@ -65,6 +61,8 @@ _renderItemWithParallax ({item, index}, parallaxProps) {
 
   render() {
     const promoSlide = this.promoSlide(1);
+    const recomendationSlide = this.TopProduct();
+    const listOfCategory = this.listOfCategory();
     return (
       <View style={styles.container}> 
       <Header searchBar rounded style={styles.searchBar}>
@@ -79,51 +77,73 @@ _renderItemWithParallax ({item, index}, parallaxProps) {
         </Header>
 
        <ScrollView contentContainerStyle={styles.contentContainer}>
-       { promoSlide }
-        <MonoText style={{marginBottom:10}}>semua promo</MonoText>
-        <Grid style={{Height: 100, marginTop:40,flexGrow: 1}}>
-          <Row>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
-            </Col>
-            <Col style={{justifyContent: 'center',alignItems: 'center'}}>
-                <Image style={styles.categoryImage} source={{uri: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Couch.png'}} />
-            </Col>
-          </Row>
-        </Grid>
-      <MonoText style={{marginTop:30}}>Best Seller</MonoText>
-      <FlatList
+       {promoSlide}
+      <MonoText style={{marginTop:30}}>Rekomendasi</MonoText>
+      {recomendationSlide}
+      <MonoText style={{marginTop:30}}>Liat Kategori</MonoText>
+      {listOfCategory}
+        </ScrollView>
+      </View>
+    );
+  }
+
+  listOfCategory(){
+    return (
+      <Grid style={{flexGrow: 1}}>
+        <Col style={{justifyContent: 'center',alignItems: 'center'}}>
+            {LISTOFCATEGORY.map(function(arr,index) {
+              return(
+                <Row key={index}>
+                <Card style={{borderRadius:10,width:'90%'}}>
+                  <Body style={{marginTop:10}}>
+                    <Text style={{fontSize:13,borderBottomLeftRadius:30,borderBottomRightRadius:30}}>{arr.name}</Text>
+                    <Image source={{uri : arr.imageUrl}} style={{height: 100, width: 120, borderTopLeftRadius:10, borderTopRightRadius:10}}/>
+                  </Body>
+                </Card>
+              </Row>
+              )
+          })}
+          </Col>
+          <Col style={{justifyContent: 'center',alignItems: 'center'}}>
+            {LISTOFCATEGORY.map(function(arr,index) {
+              return(
+                <Row key={index}>
+                <Card style={{borderRadius:10,width:'90%'}}>
+                  <Body style={{marginTop:10}}>
+                    <Text style={{fontSize:13,borderBottomLeftRadius:30,borderBottomRightRadius:30}}>{arr.name}</Text>
+                    <Image source={{uri : arr.imageUrl}} style={{height: 100, width: 120, borderTopLeftRadius:10, borderTopRightRadius:10}}/>
+                  </Body>
+                </Card>
+              </Row>
+              )
+          })}
+          </Col>
+    </Grid>
+
+    )
+  }
+
+  TopProduct () {
+    return (
+        <FlatList
         horizontal
         data={PRODUCTS}
         renderItem={({ item: rowData }) => {
           return (
-            <Card>
+            <Card style={{borderRadius:10}}>
               <Body>
-                <Image source={{uri : rowData.imageUrl}} style={{height: 150, width: 150, flex: 1}}/>
+                <Image source={{uri : rowData.imageUrl}} style={{height: 113, width: 114, borderTopLeftRadius:10, borderTopRightRadius:10}}/>
               </Body>
-            <CardItem footer>
               <Left>
                <Text style={{fontSize:13}}>{rowData.name} {'\n'} {rowData.price}</Text>
               </Left>
-            </CardItem>
             </Card>
           );
         }}
         keyExtractor = { (item, index) => index.toString() }
       />
-        </ScrollView>
-      </View>
     );
-  }
+}
 
   promoSlide (number) {
     const { slider1ActiveSlide } = this.state;
@@ -142,62 +162,18 @@ _renderItemWithParallax ({item, index}, parallaxProps) {
               inactiveSlideShift={20}
               containerCustomStyle={styles.slider}
               contentContainerCustomStyle={styles.sliderContentContainer}
-              loop={true}
-              loopClonesPerSide={2}
+              // loop={true}
+              // loopClonesPerSide={2}
               autoplay={true}
               autoplayDelay={2000}
               autoplayInterval={5000}
               onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
             />
-            {/* <Pagination
-              dotsLength={ENTRIES1.length}
-              activeDotIndex={slider1ActiveSlide}
-              containerStyle={styles.paginationContainer}
-              dotColor={'rgba(255, 255, 255, 0.92)'}
-              dotStyle={styles.paginationDot}
-              inactiveDotColor={colors.black}
-              inactiveDotOpacity={0.4}
-              inactiveDotScale={0.6}
-              carouselRef={this._slider1Ref}
-              tappableDots={!!this._slider1Ref}
-            /> */}
         </View>
     );
-}
+ }
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
-}
+} 
 
 const styles = StyleSheet.create({
   container: {

@@ -9,7 +9,7 @@ function wp (percentage) {
     return Math.round(value);
 }
 
-const slideHeight = viewportHeight * 0.36;
+const slideHeight = viewportHeight * 0.21;
 const slideWidth = wp(75);
 const itemHorizontalMargin = wp(2);
 
@@ -41,8 +41,9 @@ export default StyleSheet.create({
         flex: 1,
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
         backgroundColor: 'white',
-        borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius,
+        // borderTopLeftRadius: entryBorderRadius,
+        // borderTopRightRadius: entryBorderRadius,
+        borderRadius: 10,
     },
     imageContainerEven: {
         backgroundColor: colors.black
@@ -75,7 +76,7 @@ export default StyleSheet.create({
         // paddingTop: 20 - entryBorderRadius,
         // paddingBottom: 20,
         paddingHorizontal: 16,
-        backgroundColor: 'white',
+        backgroundColor: 'grey',
         borderBottomLeftRadius: entryBorderRadius,
         borderBottomRightRadius: entryBorderRadius,
     },

@@ -3,6 +3,15 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 import styles from '../styles/SliderEntry.style';
+import { TabNavigator, StackNavigator,createStackNavigator } from "react-navigation";
+import PromoScreen from '../screens/PromoScreen';
+
+const RootStack = createStackNavigator({
+    Home: {
+      screen: PromoScreen
+    },
+  });
+
 
 export default class SliderEntry extends Component {
 
@@ -35,6 +44,7 @@ export default class SliderEntry extends Component {
     }
 
     render () {
+
         const { data: { title, subtitle }, even } = this.props;
 
         const uppercaseTitle = title ? (
@@ -50,14 +60,14 @@ export default class SliderEntry extends Component {
             <TouchableOpacity
               activeOpacity={1}
               style={styles.slideInnerContainer}
-              onPress={() => { alert(`WAW!! '${title}'`); }}
+              onPress={() => { this.goToPromo(title)}}
               >
                 <View style={styles.shadow}/>
                 <View style={styles.imageContainer}>
                     { this.image }
-                    <View style={styles.radiusMask} />
+                    {/* <View style={styles.radiusMask} /> */}
                 </View>
-                <View style={styles.textContainer}>
+                {/* <View style={styles.textContainer}>
                     { uppercaseTitle }
                     <Text
                       style={styles.subtitle}
@@ -65,8 +75,12 @@ export default class SliderEntry extends Component {
                     >
                         { subtitle }
                     </Text>
-                </View>
+                </View> */}
             </TouchableOpacity>
         );
+    }
+    goToPromo(title){
+        return <RootStack />;
+        // this.props.navigation.navigate('Chat', { user: 'Andry' })}
     }
 }
